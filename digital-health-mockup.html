@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Health - Analytics+</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+    }
+    /* Left navigation */
+    .sidebar {
+      width: 260px;
+      min-height: 100vh;
+      background: #e8e8e8;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .logo {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .logo-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .user-profile {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #ddd;
+    }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: #cbd5e1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+    }
+    .user-info {
+      flex: 1;
+    }
+    .user-name {
+      font-weight: 600;
+      color: #1f2937;
+      font-size: 14px;
+    }
+    .user-org {
+      font-size: 12px;
+      color: #64748b;
+    }
+    .user-chevron {
+      color: #94a3b8;
+      font-size: 12px;
+    }
+    .nav-list {
+      flex: 1;
+      padding: 12px 0;
+      overflow-y: auto;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      color: #475569;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+    }
+    .nav-item:hover {
+      background: #ddd;
+      color: #1e293b;
+    }
+    .nav-item.active {
+      background: #2563eb;
+      color: white;
+      border-left-color: #1d4ed8;
+    }
+    .nav-item i {
+      width: 20px;
+      text-align: center;
+      font-size: 16px;
+    }
+    .nav-item .chevron {
+      margin-left: auto;
+      font-size: 10px;
+      opacity: 0.8;
+    }
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid #ddd;
+    }
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #475569;
+    }
+    .theme-toggle input {
+      width: 44px;
+      height: 24px;
+      accent-color: #2563eb;
+    }
+    /* Main content */
+    .main {
+      flex: 1;
+      background: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .main-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .back-arrow {
+      color: #64748b;
+      cursor: pointer;
+      font-size: 20px;
+    }
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .main-content {
+      flex: 1 1 auto;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-height: 0;
+    }
+    .dashboard-row {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 24px;
+      min-height: 0;
+      flex: 0 0 auto;
+    }
+    /* Left column: summary cards stacked vertically - drives row height */
+    .summary-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 220px;
+      flex-shrink: 0;
+    }
+    /* Wrapper has min-height:0 so row height = cards height; then it stretches to match */
+    .chart-wrapper {
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+    }
+    .summary-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+    }
+    .summary-card-header {
+      padding: 12px 16px;
+      min-height: 44px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .summary-card-header.dark-blue { background: #1d4ed8; }
+    .summary-card-help {
+      margin-left: auto;
+      opacity: 0.9;
+      cursor: help;
+    }
+    .summary-card-header.light-purple { background: #a78bfa; }
+    .summary-card-header.light-pink { background: #f472b6; }
+    .summary-card-body {
+      padding: 16px;
+    }
+    .summary-card-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1f2937;
+      display: block;
+    }
+    .summary-card-value.health-rating-value {
+      color: #0d9488;
+    }
+    .summary-card-unit {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+    .summary-card-body.placeholder {
+      min-height: 60px;
+    }
+    /* Chart card - fills wrapper so height matches summary cards */
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      padding: 24px;
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+    .card-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .date-picker-widget {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #374151;
+      cursor: pointer;
+      position: relative;
+    }
+    .date-picker-widget:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    .date-picker-widget i {
+      color: #6b7280;
+      font-size: 14px;
+    }
+    /* Calendar dropdown */
+    .calendar-dropdown {
+      position: fixed;
+      z-index: 10001;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+      padding: 16px;
+      min-width: 280px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+    }
+    .calendar-dropdown.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .calendar-month-year {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .calendar-prev,
+    .calendar-next {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #f1f5f9;
+      color: #475569;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    .calendar-prev:hover,
+    .calendar-next:hover {
+      background: #e2e8f0;
+      color: #1f2937;
+    }
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      margin-bottom: 8px;
+    }
+    .calendar-weekday {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #374151;
+      border-radius: 6px;
+      cursor: default;
+    }
+    .calendar-day.other-month {
+      color: #cbd5e1;
+    }
+    .calendar-day.this-month {
+      cursor: pointer;
+    }
+    .calendar-day.this-month:hover {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+    .calendar-day.today {
+      background: #2563eb;
+      color: #fff;
+    }
+    .calendar-day.today:hover {
+      background: #1d4ed8;
+      color: #fff;
+    }
+    .card-title .info-icon {
+      color: #94a3b8;
+      font-size: 14px;
+      cursor: help;
+    }
+    /* Horizontal bar chart */
+    .chart-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+      min-height: 0;
+      justify-content: space-evenly;
+    }
+    .chart-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 0;
+      flex: 1;
+    }
+    /* Diverging layout: left bar area | label (center) | right bar area | value */
+    .chart-bar-side {
+      flex: 1;
+      min-width: 0;
+      height: 24px;
+      background: #fff;
+      display: flex;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .chart-bar-side.left {
+      justify-content: flex-end;
+    }
+    .chart-bar-side.right {
+      justify-content: flex-start;
+    }
+    .chart-label {
+      width: 200px;
+      flex-shrink: 0;
+      font-size: 14px;
+      color: #374151;
+      text-align: center;
+      padding: 0 8px;
+    }
+    .chart-bar {
+      height: 100%;
+      border-radius: 4px;
+      min-width: 4px;
+      transition: width 0.4s ease;
+    }
+    .chart-bar.positive-1 { background: #1d4ed8; }
+    .chart-bar.positive-2 { background: #0d9488; }
+    .chart-bar.neutral { background: #64748b; }
+    .chart-bar.negative { background: #ea580c; }
+    .chart-value {
+      width: 56px;
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .chart-value.left { text-align: left; }
+    .chart-value.right { text-align: right; }
+    /* Donut chart card */
+    .donut-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      padding: 24px;
+      flex: 0 0 auto;
+    }
+    .donut-card .card-header {
+      margin-bottom: 20px;
+    }
+    .donut-card .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .donut-card .card-title .info-icon {
+      color: #94a3b8;
+      font-size: 14px;
+      cursor: help;
+    }
+    .donut-chart-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .donut-chart {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #1d4ed8 0deg 144deg,
+        #0d9488 144deg 234deg,
+        #64748b 234deg 306deg,
+        #ea580c 306deg 360deg
+      );
+      position: relative;
+      flex-shrink: 0;
+    }
+    .donut-chart::after {
+      content: '';
+      position: absolute;
+      inset: 28%;
+      background: #fff;
+      border-radius: 50%;
+    }
+    .donut-legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 16px;
+      justify-items: start;
+      max-width: 200px;
+    }
+    .donut-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #374151;
+    }
+    .donut-legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .donut-legend-dot.healthy { background: #1d4ed8; }
+    .donut-legend-dot.slightly-healthy { background: #0d9488; }
+    .donut-legend-dot.slightly-unhealthy { background: #64748b; }
+    .donut-legend-dot.unhealthy { background: #ea580c; }
+    /* Bottom row: donut + two list cards in one row */
+    .bottom-cards-row {
+      display: flex;
+      gap: 24px;
+      align-items: stretch;
+      flex: 0 0 auto;
+    }
+    .bottom-cards-row .donut-card {
+      flex: 0 0 auto;
+      min-width: 260px;
+    }
+    .list-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      padding: 24px;
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .list-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 16px;
+    }
+    .list-card-title .info-icon {
+      color: #94a3b8;
+      font-size: 14px;
+      cursor: help;
+    }
+    .list-card-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 14px;
+    }
+    .list-card-table th {
+      text-align: left;
+      font-weight: 600;
+      color: #374151;
+      padding: 8px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .list-card-table th:last-child {
+      text-align: right;
+    }
+    .list-card-table td {
+      padding: 10px 0;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+    }
+    .list-card-table td:last-child {
+      text-align: right;
+      font-weight: 500;
+      color: #1f2937;
+    }
+    .list-card-more {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #2563eb;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .list-card-more:hover {
+      text-decoration: underline;
+    }
+    /* Clickable summary cards */
+    .summary-card[data-card] {
+      cursor: pointer;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .summary-card[data-card]:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    /* Custom tooltip */
+    #tooltip {
+      position: fixed;
+      z-index: 10000;
+      max-width: 280px;
+      padding: 8px 12px;
+      font-size: 13px;
+      line-height: 1.4;
+      color: #fff;
+      background: #1f2937;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+    }
+    #tooltip.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    /* Detail overlay */
+    #detail-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+    #detail-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    #detail-overlay .detail-panel {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      max-width: 480px;
+      width: 100%;
+      max-height: 85vh;
+      overflow: auto;
+      position: relative;
+    }
+    #detail-overlay .detail-panel h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 12px;
+      padding-right: 36px;
+    }
+    #detail-overlay .detail-panel p {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    #detail-overlay .detail-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #f1f5f9;
+      color: #64748b;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    #detail-overlay .detail-close:hover {
+      background: #e2e8f0;
+      color: #1f2937;
+    }
+    #detail-overlay .detail-body {
+      padding: 24px;
+    }
+    #detail-overlay .detail-chart-placeholder {
+      height: 180px;
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      border-radius: 8px;
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">N</div>
+      <span class="logo-text">Analytics+</span>
+    </div>
+    <div class="user-profile">
+      <div class="user-avatar">
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="user-info">
+        <div class="user-name">Alex Poon</div>
+        <div class="user-org">ClassLink</div>
+      </div>
+      <i class="fas fa-chevron-right user-chevron"></i>
+    </div>
+    <nav class="nav-list">
+      <a class="nav-item" href="#"><i class="fas fa-th-large"></i> Overview</a>
+      <a class="nav-item" href="#"><i class="fas fa-chart-bar"></i> Custom Dashboards <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-list"></i> Logins <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-school"></i> Schools <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-users"></i> Users <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-folder"></i> Digital Resources</a>
+      <a class="nav-item active" href="#"><i class="fas fa-heartbeat"></i> Digital Wellness</a>
+      <a class="nav-item" href="#"><i class="fas fa-coins"></i> Costs</a>
+      <a class="nav-item" href="#"><i class="fas fa-cloud-download-alt"></i> Exports</a>
+      <a class="nav-item" href="#"><i class="fas fa-clock"></i> Audit Logs <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-cloud"></i> Help</a>
+      <a class="nav-item" href="#"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="main-header">
+      <h1 class="page-title">Digital Wellness</h1>
+    </header>
+    <div class="main-content">
+      <div class="dashboard-row">
+      <div class="summary-cards">
+        <div class="summary-card" data-card="wellness-rating" role="button" tabindex="0" aria-label="Wellness Rating – click for details">
+          <div class="summary-card-header light-purple">
+            <i class="fas fa-heartbeat"></i>
+            <span>Wellness Rating</span>
+            <i class="fas fa-info-circle summary-card-help" data-tooltip="Healthy if Net Productive Time is 60+ min, Slightly Healthy 30–59 min, Slightly Unhealthy 0–29 min, Unhealthy &lt;0 min"></i>
+          </div>
+          <div class="summary-card-body">
+            <span class="summary-card-value health-rating-value">Slightly Healthy</span>
+            <span class="summary-card-unit">Based on Student Averages</span>
+          </div>
+        </div>
+        <div class="summary-card" data-card="net-productive" role="button" tabindex="0" aria-label="Net Productive Time – click for details">
+          <div class="summary-card-header dark-blue">
+            <i class="fas fa-clock"></i>
+            <span>Net Productive Time</span>
+            <i class="fas fa-info-circle summary-card-help" data-tooltip="Average daily time in learning resources minus time in passive and recreational sites"></i>
+          </div>
+          <div class="summary-card-body">
+            <span class="summary-card-value">+15</span>
+            <span class="summary-card-unit">Minutes/Day</span>
+          </div>
+        </div>
+        <div class="summary-card" data-card="student-usage" role="button" tabindex="0" aria-label="Student Usage – click for details">
+          <div class="summary-card-header light-pink">
+            <i class="fas fa-users"></i>
+            <span>Student Usage</span>
+            <i class="fas fa-info-circle summary-card-help" data-tooltip="Percentage of students whose usage is classified as Healthy"></i>
+          </div>
+          <div class="summary-card-body">
+            <span class="summary-card-value">65%</span>
+            <span class="summary-card-unit">Students with Healthy Usage</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-wrapper">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title-wrap">
+            <h2 class="card-title">Daily Minutes per Student by Category <i class="fas fa-info-circle info-icon" data-tooltip="Average daily minutes students spend in each category"></i></h2>
+          </div>
+          <div class="date-picker-widget" id="date-picker-widget" data-tooltip="Change month to view different period" aria-haspopup="dialog" aria-expanded="false">
+            <i class="fas fa-calendar-alt"></i>
+            <span id="date-picker-value">February 2026</span>
+            <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
+          </div>
+        </div>
+        <div class="chart-bars">
+          <div class="chart-row" data-tooltip="Educational and Productivity: 59 min/day – learning apps and productive sites">
+            <span class="chart-value left"></span>
+            <div class="chart-bar-side left"></div>
+            <span class="chart-label">Educational and Productivity</span>
+            <div class="chart-bar-side right">
+              <div class="chart-bar positive-1" style="width: 90%;"></div>
+            </div>
+            <span class="chart-value right">59 min</span>
+          </div>
+          <div class="chart-row" data-tooltip="Creative: 43 min/day – art, music, design tools">
+            <span class="chart-value left"></span>
+            <div class="chart-bar-side left"></div>
+            <span class="chart-label">Creative</span>
+            <div class="chart-bar-side right">
+              <div class="chart-bar positive-2" style="width: 66%;"></div>
+            </div>
+            <span class="chart-value right">43 min</span>
+          </div>
+          <div class="chart-row" data-tooltip="Search, Email and Reference: 35 min/day – neutral category">
+            <span class="chart-value left"></span>
+            <div class="chart-bar-side left"></div>
+            <span class="chart-label">Search, Email and Reference</span>
+            <div class="chart-bar-side right">
+              <div class="chart-bar neutral" style="width: 54%;"></div>
+            </div>
+            <span class="chart-value right">35 min</span>
+          </div>
+          <div class="chart-row" data-tooltip="Passive and Recreational: 65 min/day – video, social, games">
+            <span class="chart-value left">65 min</span>
+            <div class="chart-bar-side left">
+              <div class="chart-bar negative" style="width: 100%;"></div>
+            </div>
+            <span class="chart-label">Passive and Recreational</span>
+            <div class="chart-bar-side right"></div>
+            <span class="chart-value right"></span>
+          </div>
+          <div class="chart-row" data-tooltip="Excess Time: 22 min/day – beyond recommended limits">
+            <span class="chart-value left">22 min</span>
+            <div class="chart-bar-side left">
+              <div class="chart-bar negative" style="width: 34%;"></div>
+            </div>
+            <span class="chart-label">Excess Time</span>
+            <div class="chart-bar-side right"></div>
+            <span class="chart-value right"></span>
+          </div>
+          <div class="chart-row" data-tooltip="Late Night Time: 0 min – usage outside recommended hours">
+            <span class="chart-value left">0 min</span>
+            <div class="chart-bar-side left">
+              <div class="chart-bar negative" style="width: 0%;"></div>
+            </div>
+            <span class="chart-label">Late Night Time</span>
+            <div class="chart-bar-side right"></div>
+            <span class="chart-value right"></span>
+          </div>
+        </div>
+      </div>
+      </div>
+      </div>
+      <div class="bottom-cards-row">
+      <div class="donut-card">
+        <div class="card-header">
+          <h2 class="card-title">Wellness Distribution <i class="fas fa-info-circle info-icon" data-tooltip="Distribution of students by health rating"></i></h2>
+        </div>
+        <div class="donut-chart-wrap">
+          <div class="donut-chart" aria-hidden="true" data-tooltip="Healthy 40% · Slightly Healthy 25% · Slightly Unhealthy 20% · Unhealthy 15%"></div>
+          <div class="donut-legend">
+            <div class="donut-legend-item" data-tooltip="60+ min Net Productive Time per day">
+              <span class="donut-legend-dot healthy"></span>
+              <span>Healthy (40%)</span>
+            </div>
+            <div class="donut-legend-item" data-tooltip="30–59 min Net Productive Time per day">
+              <span class="donut-legend-dot slightly-healthy"></span>
+              <span>Slightly Healthy (25%)</span>
+            </div>
+            <div class="donut-legend-item" data-tooltip="0–29 min Net Productive Time per day">
+              <span class="donut-legend-dot slightly-unhealthy"></span>
+              <span>Slightly Unhealthy (20%)</span>
+            </div>
+            <div class="donut-legend-item" data-tooltip="Less than 0 min Net Productive Time per day">
+              <span class="donut-legend-dot unhealthy"></span>
+              <span>Unhealthy (15%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="list-card">
+          <h2 class="list-card-title">Most Used Unproductive Resources <i class="fas fa-info-circle info-icon" data-tooltip="Sites and apps classified as passive or recreational, by total minutes per day"></i></h2>
+          <table class="list-card-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Minutes Per Day</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>YouTube</td><td>48</td></tr>
+              <tr><td>Netflix</td><td>35</td></tr>
+              <tr><td>TikTok</td><td>28</td></tr>
+              <tr><td>Instagram</td><td>22</td></tr>
+              <tr><td>Roblox</td><td>18</td></tr>
+            </tbody>
+          </table>
+          <span class="list-card-more">+ 3 more <i class="fas fa-chevron-down"></i></span>
+        </div>
+        <div class="list-card">
+          <h2 class="list-card-title">Students with Most Unhealthy Usage <i class="fas fa-info-circle info-icon" data-tooltip="Students with more usage of unproductive resources than productive resources"></i></h2>
+          <table class="list-card-table">
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Net Productive Minutes/Day</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Jordan M.</td><td>-42</td></tr>
+              <tr><td>Sam K.</td><td>-38</td></tr>
+              <tr><td>Alex R.</td><td>-35</td></tr>
+              <tr><td>Casey L.</td><td>-31</td></tr>
+              <tr><td>Riley T.</td><td>-28</td></tr>
+            </tbody>
+          </table>
+          <span class="list-card-more">+ 4 more <i class="fas fa-chevron-down"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail overlay (shown when a summary card is clicked) -->
+    <div id="detail-overlay" aria-hidden="true" aria-modal="true" role="dialog" aria-labelledby="detail-title">
+      <div class="detail-panel" id="detail-panel-wellness-rating" hidden>
+        <button type="button" class="detail-close" aria-label="Close"><i class="fas fa-times"></i></button>
+        <div class="detail-body">
+          <h3 id="detail-title-wellness-rating">Wellness Rating</h3>
+          <p>This rating is derived from each student’s Net Productive Time. Healthy = 60+ min, Slightly Healthy = 30–59 min, Slightly Unhealthy = 0–29 min, Unhealthy = less than 0 min.</p>
+          <div class="detail-chart-placeholder">Trend: Wellness rating over last 6 months</div>
+        </div>
+      </div>
+      <div class="detail-panel" id="detail-panel-net-productive" hidden>
+        <button type="button" class="detail-close" aria-label="Close"><i class="fas fa-times"></i></button>
+        <div class="detail-body">
+          <h3 id="detail-title-net-productive">Net Productive Time</h3>
+          <p>Average daily minutes in learning and productive resources, minus time in passive and recreational sites. Positive values indicate more productive than unproductive time.</p>
+          <div class="detail-chart-placeholder">Trend: Net productive minutes over time</div>
+        </div>
+      </div>
+      <div class="detail-panel" id="detail-panel-student-usage" hidden>
+        <button type="button" class="detail-close" aria-label="Close"><i class="fas fa-times"></i></button>
+        <div class="detail-body">
+          <h3 id="detail-title-student-usage">Student Usage</h3>
+          <p>Percentage of students whose usage is classified as Healthy (Net Productive Time ≥ 60 min per day). Use this to see how many students are meeting wellness targets.</p>
+          <div class="detail-chart-placeholder">Breakdown: Healthy vs other categories</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="tooltip" role="tooltip"></div>
+
+  <script>
+    (function () {
+      // —— Tooltips ——
+      var tooltip = document.getElementById('tooltip');
+      var tooltipDelay = 300;
+      var tooltipTimer = null;
+
+      function showTooltip(ev, text) {
+        if (!text) return;
+        clearTimeout(tooltipTimer);
+        tooltipTimer = setTimeout(function () {
+          tooltip.textContent = text;
+          tooltip.classList.add('visible');
+          var x = ev.clientX;
+          var y = ev.clientY;
+          var gap = 10;
+          var rect = tooltip.getBoundingClientRect();
+          var w = rect.width;
+          var h = rect.height;
+          var vw = window.innerWidth;
+          var vh = window.innerHeight;
+          var left = x + gap;
+          var top = y + gap;
+          if (left + w > vw) left = x - w - gap;
+          if (top + h > vh) top = y - h - gap;
+          if (left < 0) left = gap;
+          if (top < 0) top = gap;
+          tooltip.style.left = left + 'px';
+          tooltip.style.top = top + 'px';
+        }, tooltipDelay);
+      }
+
+      function hideTooltip() {
+        clearTimeout(tooltipTimer);
+        tooltip.classList.remove('visible');
+      }
+
+      document.querySelectorAll('[data-tooltip]').forEach(function (el) {
+        el.addEventListener('mouseenter', function (e) { showTooltip(e, el.getAttribute('data-tooltip')); });
+        el.addEventListener('mouseleave', hideTooltip);
+      });
+
+      // —— Detail overlay (clickable cards) ——
+      var overlay = document.getElementById('detail-overlay');
+      var panels = {
+        'wellness-rating': document.getElementById('detail-panel-wellness-rating'),
+        'net-productive': document.getElementById('detail-panel-net-productive'),
+        'student-usage': document.getElementById('detail-panel-student-usage')
+      };
+
+      function openDetail(cardId) {
+        var panel = panels[cardId];
+        if (!panel) return;
+        Object.keys(panels).forEach(function (id) { panels[id].setAttribute('hidden', ''); });
+        panel.removeAttribute('hidden');
+        overlay.classList.add('visible');
+        overlay.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeDetail() {
+        overlay.classList.remove('visible');
+        overlay.setAttribute('aria-hidden', 'true');
+        Object.keys(panels).forEach(function (id) { panels[id].setAttribute('hidden', ''); });
+      }
+
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeDetail();
+      });
+
+      overlay.querySelectorAll('.detail-close').forEach(function (btn) {
+        btn.addEventListener('click', closeDetail);
+      });
+
+      document.querySelectorAll('.summary-card[data-card]').forEach(function (card) {
+        var cardId = card.getAttribute('data-card');
+        card.addEventListener('click', function () { openDetail(cardId); });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openDetail(cardId);
+          }
+        });
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay.classList.contains('visible')) closeDetail();
+      });
+
+      // —— Date picker calendar ——
+      var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      var widget = document.getElementById('date-picker-widget');
+      var valueEl = document.getElementById('date-picker-value');
+      var viewYear = 2026;
+      var viewMonth = 2; // 1-based
+
+      function parseWidgetValue() {
+        var text = (valueEl && valueEl.textContent) ? valueEl.textContent.trim() : '';
+        var parts = text.split(/\s+/);
+        if (parts.length >= 2) {
+          var mi = MONTHS.indexOf(parts[0]);
+          var y = parseInt(parts[1], 10);
+          if (mi >= 0 && !isNaN(y)) {
+            viewMonth = mi + 1;
+            viewYear = y;
+          }
+        }
+      }
+
+      function buildCalendarEl() {
+        var wrap = document.createElement('div');
+        wrap.className = 'calendar-dropdown';
+        wrap.setAttribute('role', 'dialog');
+        wrap.setAttribute('aria-label', 'Choose month');
+        wrap.innerHTML =
+          '<div class="calendar-header">' +
+            '<button type="button" class="calendar-prev" aria-label="Previous month"><i class="fas fa-chevron-left"></i></button>' +
+            '<span class="calendar-month-year"></span>' +
+            '<button type="button" class="calendar-next" aria-label="Next month"><i class="fas fa-chevron-right"></i></button>' +
+          '</div>' +
+          '<div class="calendar-weekdays">' +
+            '<span class="calendar-weekday">Su</span><span class="calendar-weekday">Mo</span><span class="calendar-weekday">Tu</span><span class="calendar-weekday">We</span><span class="calendar-weekday">Th</span><span class="calendar-weekday">Fr</span><span class="calendar-weekday">Sa</span>' +
+          '</div>' +
+          '<div class="calendar-grid"></div>';
+        return wrap;
+      }
+
+      var calendarEl = buildCalendarEl();
+      document.body.appendChild(calendarEl);
+
+      var headerMonthYear = calendarEl.querySelector('.calendar-month-year');
+      var gridEl = calendarEl.querySelector('.calendar-grid');
+      var today = new Date();
+      var todayY = today.getFullYear();
+      var todayM = today.getMonth() + 1;
+      var todayD = today.getDate();
+
+      function daysInMonth(y, m) {
+        return new Date(y, m, 0).getDate();
+      }
+
+      function firstWeekday(y, m) {
+        return new Date(y, m - 1, 1).getDay();
+      }
+
+      function renderCalendar() {
+        headerMonthYear.textContent = MONTHS[viewMonth - 1] + ' ' + viewYear;
+        gridEl.innerHTML = '';
+        var first = firstWeekday(viewYear, viewMonth);
+        var days = daysInMonth(viewYear, viewMonth);
+        var prevM = viewMonth === 1 ? 12 : viewMonth - 1;
+        var prevY = viewMonth === 1 ? viewYear - 1 : viewYear;
+        var prevDays = daysInMonth(prevY, prevM);
+        var cells = [];
+        var i;
+        for (i = 0; i < first; i++) {
+          var d = prevDays - first + 1 + i;
+          cells.push({ day: d, other: true });
+        }
+        for (i = 1; i <= days; i++) {
+          cells.push({ day: i, other: false });
+        }
+        var remaining = 42 - cells.length;
+        for (i = 1; i <= remaining; i++) {
+          cells.push({ day: i, other: true });
+        }
+        cells.forEach(function (c) {
+          var cell = document.createElement('div');
+          cell.className = 'calendar-day' + (c.other ? ' other-month' : ' this-month');
+          cell.textContent = c.day;
+          if (!c.other && viewYear === todayY && viewMonth === todayM && c.day === todayD) {
+            cell.classList.add('today');
+          }
+          if (!c.other) {
+            cell.setAttribute('data-day', c.day);
+            cell.addEventListener('click', function () {
+              valueEl.textContent = MONTHS[viewMonth - 1] + ' ' + viewYear;
+              closeCalendar();
+            });
+          }
+          gridEl.appendChild(cell);
+        });
+      }
+
+      function positionCalendar() {
+        var rect = widget.getBoundingClientRect();
+        calendarEl.style.left = rect.left + 'px';
+        calendarEl.style.top = (rect.bottom + 6) + 'px';
+      }
+
+      function openCalendar() {
+        parseWidgetValue();
+        renderCalendar();
+        positionCalendar();
+        calendarEl.classList.add('visible');
+        widget.setAttribute('aria-expanded', 'true');
+      }
+
+      function closeCalendar() {
+        calendarEl.classList.remove('visible');
+        widget.setAttribute('aria-expanded', 'false');
+      }
+
+      widget.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (calendarEl.classList.contains('visible')) closeCalendar();
+        else openCalendar();
+      });
+
+      calendarEl.querySelector('.calendar-prev').addEventListener('click', function () {
+        viewMonth--;
+        if (viewMonth < 1) { viewMonth = 12; viewYear--; }
+        renderCalendar();
+      });
+      calendarEl.querySelector('.calendar-next').addEventListener('click', function () {
+        viewMonth++;
+        if (viewMonth > 12) { viewMonth = 1; viewYear++; }
+        renderCalendar();
+      });
+
+      document.addEventListener('click', function (e) {
+        if (calendarEl.classList.contains('visible') && !calendarEl.contains(e.target) && !widget.contains(e.target)) {
+          closeCalendar();
+        }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && calendarEl.classList.contains('visible')) closeCalendar();
+      });
+    })();
+  </script>
+</body>
+</html>
