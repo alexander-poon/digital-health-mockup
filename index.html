@@ -337,49 +337,34 @@
       background: #e2e8f0;
       color: #1f2937;
     }
-    .calendar-weekdays {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 2px;
-      margin-bottom: 8px;
-    }
-    .calendar-weekday {
+    .calendar-month-year {
+      min-width: 4em;
       text-align: center;
-      font-size: 11px;
-      font-weight: 600;
-      color: #64748b;
-      text-transform: uppercase;
     }
     .calendar-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 2px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
     }
-    .calendar-day {
-      aspect-ratio: 1;
+    .calendar-month {
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 10px 8px;
       font-size: 13px;
       color: #374151;
       border-radius: 6px;
-      cursor: default;
-    }
-    .calendar-day.other-month {
-      color: #cbd5e1;
-    }
-    .calendar-day.this-month {
       cursor: pointer;
     }
-    .calendar-day.this-month:hover {
+    .calendar-month:hover {
       background: #e0e7ff;
       color: #3730a3;
     }
-    .calendar-day.today {
+    .calendar-month.selected {
       background: #2563eb;
       color: #fff;
     }
-    .calendar-day.today:hover {
+    .calendar-month.selected:hover {
       background: #1d4ed8;
       color: #fff;
     }
@@ -590,6 +575,16 @@
     .list-card-more:hover {
       text-decoration: underline;
     }
+    .list-card-more i {
+      transition: transform 0.2s ease;
+    }
+    .list-card-table .more-row {
+      display: none;
+    }
+    .list-card.expanded .list-card-table .more-row {
+      display: table-row;
+    }
+    .list-card.expanded .list-card-more i { transform: rotate(180deg); }
     /* Clickable summary cards */
     .summary-card[data-card] {
       cursor: pointer;
@@ -845,7 +840,7 @@
           <h2 class="card-title">Wellness Distribution <i class="fas fa-info-circle info-icon" data-tooltip="Distribution of students by health rating"></i></h2>
         </div>
         <div class="donut-chart-wrap">
-          <div class="donut-chart" aria-hidden="true" data-tooltip="Healthy 40% · Slightly Healthy 25% · Slightly Unhealthy 20% · Unhealthy 15%"></div>
+          <div class="donut-chart" id="donut-chart" aria-hidden="true"></div>
           <div class="donut-legend">
             <div class="donut-legend-item" data-tooltip="60+ min Net Productive Time per day">
               <span class="donut-legend-dot healthy"></span>
@@ -881,9 +876,12 @@
               <tr><td>TikTok</td><td>28</td></tr>
               <tr><td>Instagram</td><td>22</td></tr>
               <tr><td>Roblox</td><td>18</td></tr>
+              <tr class="more-row"><td>Discord</td><td>15</td></tr>
+              <tr class="more-row"><td>Twitter/X</td><td>12</td></tr>
+              <tr class="more-row"><td>Gaming (other)</td><td>9</td></tr>
             </tbody>
           </table>
-          <span class="list-card-more">+ 3 more <i class="fas fa-chevron-down"></i></span>
+          <span class="list-card-more" data-more="3" data-label-more="+ 3 more" data-label-less="- 3 less"><span class="list-card-more-text">+ 3 more</span> <i class="fas fa-chevron-down"></i></span>
         </div>
         <div class="list-card">
           <h2 class="list-card-title">Students with Most Unhealthy Usage <i class="fas fa-info-circle info-icon" data-tooltip="Students with more usage of unproductive resources than productive resources"></i></h2>
@@ -900,9 +898,13 @@
               <tr><td>Alex R.</td><td>-35</td></tr>
               <tr><td>Casey L.</td><td>-31</td></tr>
               <tr><td>Riley T.</td><td>-28</td></tr>
+              <tr class="more-row"><td>Morgan P.</td><td>-25</td></tr>
+              <tr class="more-row"><td>Jamie W.</td><td>-22</td></tr>
+              <tr class="more-row"><td>Quinn D.</td><td>-19</td></tr>
+              <tr class="more-row"><td>Skyler N.</td><td>-16</td></tr>
             </tbody>
           </table>
-          <span class="list-card-more">+ 4 more <i class="fas fa-chevron-down"></i></span>
+          <span class="list-card-more" data-more="4" data-label-more="+ 4 more" data-label-less="- 4 less"><span class="list-card-more-text">+ 4 more</span> <i class="fas fa-chevron-down"></i></span>
         </div>
       </div>
     </div>
@@ -980,6 +982,68 @@
         el.addEventListener('mouseleave', hideTooltip);
       });
 
+      // Donut chart: show tooltip only for the segment under the cursor
+      (function () {
+        var donut = document.getElementById('donut-chart');
+        if (!donut) return;
+        var segments = [
+          { start: 0,   end: 144, label: 'Healthy',            pct: '40%' },
+          { start: 144, end: 234, label: 'Slightly Healthy',  pct: '25%' },
+          { start: 234, end: 306, label: 'Slightly Unhealthy', pct: '20%' },
+          { start: 306, end: 360, label: 'Unhealthy',          pct: '15%' }
+        ];
+
+        function getAngle(ev) {
+          var rect = donut.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          var dx = ev.clientX - cx;
+          var dy = ev.clientY - cy;
+          var deg = (Math.atan2(dx, -dy) * 180 / Math.PI + 360) % 360;
+          return deg;
+        }
+
+        function isOnRing(ev) {
+          var rect = donut.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          var r = Math.min(rect.width, rect.height) / 2;
+          var inner = r * 0.28;
+          var dx = ev.clientX - cx;
+          var dy = ev.clientY - cy;
+          var d = Math.sqrt(dx * dx + dy * dy);
+          return d >= inner && d <= r;
+        }
+
+        function onDonutMove(ev) {
+          if (!isOnRing(ev)) { hideTooltip(); return; }
+          var deg = getAngle(ev);
+          for (var i = 0; i < segments.length; i++) {
+            var s = segments[i];
+            if (deg >= s.start && deg < s.end) {
+              showTooltip(ev, s.label + ' ' + s.pct);
+              return;
+            }
+          }
+          showTooltip(ev, segments[0].label + ' ' + segments[0].pct);
+        }
+
+        donut.addEventListener('mouseenter', onDonutMove);
+        donut.addEventListener('mousemove', onDonutMove);
+        donut.addEventListener('mouseleave', hideTooltip);
+      })();
+
+      // List card "+ N more" expand/collapse
+      document.querySelectorAll('.list-card-more').forEach(function (el) {
+        el.addEventListener('click', function () {
+          var card = el.closest('.list-card');
+          var textEl = el.querySelector('.list-card-more-text');
+          if (!card || !textEl) return;
+          var expanded = card.classList.toggle('expanded');
+          textEl.textContent = expanded ? el.getAttribute('data-label-less') : el.getAttribute('data-label-more');
+        });
+      });
+
       // —— Detail overlay (clickable cards) ——
       var overlay = document.getElementById('detail-overlay');
       var panels = {
@@ -1053,12 +1117,9 @@
         wrap.setAttribute('aria-label', 'Choose month');
         wrap.innerHTML =
           '<div class="calendar-header">' +
-            '<button type="button" class="calendar-prev" aria-label="Previous month"><i class="fas fa-chevron-left"></i></button>' +
+            '<button type="button" class="calendar-prev" aria-label="Previous year"><i class="fas fa-chevron-left"></i></button>' +
             '<span class="calendar-month-year"></span>' +
-            '<button type="button" class="calendar-next" aria-label="Next month"><i class="fas fa-chevron-right"></i></button>' +
-          '</div>' +
-          '<div class="calendar-weekdays">' +
-            '<span class="calendar-weekday">Su</span><span class="calendar-weekday">Mo</span><span class="calendar-weekday">Tu</span><span class="calendar-weekday">We</span><span class="calendar-weekday">Th</span><span class="calendar-weekday">Fr</span><span class="calendar-weekday">Sa</span>' +
+            '<button type="button" class="calendar-next" aria-label="Next year"><i class="fas fa-chevron-right"></i></button>' +
           '</div>' +
           '<div class="calendar-grid"></div>';
         return wrap;
@@ -1069,56 +1130,29 @@
 
       var headerMonthYear = calendarEl.querySelector('.calendar-month-year');
       var gridEl = calendarEl.querySelector('.calendar-grid');
-      var today = new Date();
-      var todayY = today.getFullYear();
-      var todayM = today.getMonth() + 1;
-      var todayD = today.getDate();
-
-      function daysInMonth(y, m) {
-        return new Date(y, m, 0).getDate();
-      }
-
-      function firstWeekday(y, m) {
-        return new Date(y, m - 1, 1).getDay();
-      }
+      var selectedYear = viewYear;
+      var selectedMonth = viewMonth;
 
       function renderCalendar() {
-        headerMonthYear.textContent = MONTHS[viewMonth - 1] + ' ' + viewYear;
+        headerMonthYear.textContent = viewYear;
         gridEl.innerHTML = '';
-        var first = firstWeekday(viewYear, viewMonth);
-        var days = daysInMonth(viewYear, viewMonth);
-        var prevM = viewMonth === 1 ? 12 : viewMonth - 1;
-        var prevY = viewMonth === 1 ? viewYear - 1 : viewYear;
-        var prevDays = daysInMonth(prevY, prevM);
-        var cells = [];
-        var i;
-        for (i = 0; i < first; i++) {
-          var d = prevDays - first + 1 + i;
-          cells.push({ day: d, other: true });
-        }
-        for (i = 1; i <= days; i++) {
-          cells.push({ day: i, other: false });
-        }
-        var remaining = 42 - cells.length;
-        for (i = 1; i <= remaining; i++) {
-          cells.push({ day: i, other: true });
-        }
-        cells.forEach(function (c) {
+        for (var m = 1; m <= 12; m++) {
           var cell = document.createElement('div');
-          cell.className = 'calendar-day' + (c.other ? ' other-month' : ' this-month');
-          cell.textContent = c.day;
-          if (!c.other && viewYear === todayY && viewMonth === todayM && c.day === todayD) {
-            cell.classList.add('today');
+          cell.className = 'calendar-month';
+          cell.textContent = MONTHS[m - 1];
+          if (viewYear === selectedYear && m === selectedMonth) {
+            cell.classList.add('selected');
           }
-          if (!c.other) {
-            cell.setAttribute('data-day', c.day);
-            cell.addEventListener('click', function () {
-              valueEl.textContent = MONTHS[viewMonth - 1] + ' ' + viewYear;
-              closeCalendar();
-            });
-          }
+          cell.setAttribute('data-month', m);
+          cell.addEventListener('click', function () {
+            var monthNum = parseInt(this.getAttribute('data-month'), 10);
+            selectedMonth = monthNum;
+            selectedYear = viewYear;
+            if (valueEl) valueEl.textContent = MONTHS[selectedMonth - 1] + ' ' + selectedYear;
+            closeCalendar();
+          });
           gridEl.appendChild(cell);
-        });
+        }
       }
 
       function positionCalendar() {
@@ -1129,6 +1163,8 @@
 
       function openCalendar() {
         parseWidgetValue();
+        selectedYear = viewYear;
+        selectedMonth = viewMonth;
         renderCalendar();
         positionCalendar();
         calendarEl.classList.add('visible');
@@ -1147,13 +1183,11 @@
       });
 
       calendarEl.querySelector('.calendar-prev').addEventListener('click', function () {
-        viewMonth--;
-        if (viewMonth < 1) { viewMonth = 12; viewYear--; }
+        viewYear--;
         renderCalendar();
       });
       calendarEl.querySelector('.calendar-next').addEventListener('click', function () {
-        viewMonth++;
-        if (viewMonth > 12) { viewMonth = 1; viewYear++; }
+        viewYear++;
         renderCalendar();
       });
 
