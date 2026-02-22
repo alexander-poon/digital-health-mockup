@@ -511,6 +511,14 @@
       align-items: stretch;
       flex: 0 0 auto;
     }
+    .bottom-cards-row .list-card,
+    .bottom-cards-row .list-card-link {
+      flex: 1 1 0%;
+      min-width: 0;
+    }
+    .bottom-cards-row .list-card-link {
+      display: flex;
+    }
     .bottom-cards-row .donut-card {
       flex: 0 0 auto;
       min-width: 260px;
@@ -563,6 +571,42 @@
       font-weight: 500;
       color: #1f2937;
     }
+    .resource-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .resource-name-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .resource-name-link:hover {
+      color: #2563eb;
+    }
+    .resource-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .resource-icon.fa-brands { background: #f1f5f9; }
+    .resource-icon.icon-youtube { color: #e53935; }
+    .resource-icon.icon-netflix { color: #e50914; }
+    .resource-icon.icon-tiktok { color: #000; }
+    .resource-icon.icon-instagram { color: #e4405f; }
+    .resource-icon.icon-discord { color: #5865f2; }
+    .resource-icon.icon-twitter { color: #1da1f2; }
+    .resource-icon.icon-gaming { color: #64748b; }
     .list-card-more {
       margin-top: 12px;
       font-size: 14px;
@@ -585,6 +629,30 @@
       display: table-row;
     }
     .list-card.expanded .list-card-more i { transform: rotate(180deg); }
+    .list-card-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    .list-card-link:hover {
+      color: inherit;
+    }
+    /* Chart panels (one visible at a time) */
+    .chart-panel {
+      display: none;
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      flex-direction: column;
+    }
+    .chart-panel.visible {
+      display: flex;
+    }
+    /* Selected summary card */
+    .summary-card[data-card].selected {
+      box-shadow: 0 0 0 2px #2563eb;
+    }
     /* Clickable summary cards */
     .summary-card[data-card] {
       cursor: pointer;
@@ -592,6 +660,119 @@
     }
     .summary-card[data-card]:hover {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    /* Vertical bar chart (12 months Net Productive Time) */
+    .vertical-bars-chart {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      padding-top: 8px;
+    }
+    .vertical-bars-inner {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 8px;
+      flex: 1;
+      min-height: 320px;
+      padding: 0 8px 8px;
+    }
+    .vertical-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+    }
+    .vertical-bar-zones {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      width: 100%;
+      align-items: center;
+    }
+    .vertical-bar-zone-positive {
+      flex: 0 0 86%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 0;
+      width: 100%;
+      align-items: center;
+    }
+    .vertical-bar-baseline {
+      flex: 0 0 2px;
+      width: 100%;
+      max-width: 48px;
+      background: #94a3b8;
+      align-self: center;
+    }
+    .vertical-bar-zone-negative {
+      flex: 0 0 12%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-height: 0;
+      width: 100%;
+      align-items: center;
+    }
+    .vertical-bar {
+      width: 100%;
+      max-width: 40px;
+      min-height: 8px;
+      flex-shrink: 0;
+      border-radius: 4px 4px 0 0;
+      align-self: center;
+      transition: flex-basis 0.3s ease;
+      cursor: default;
+    }
+    .vertical-bar.range-60-plus { background: #1d4ed8; }
+    .vertical-bar.range-15-59 { background: #0d9488; }
+    .vertical-bar.range-0-15 { background: #64748b; }
+    .vertical-bar.range-negative {
+      background: #ea580c;
+      border-radius: 0 0 4px 4px;
+    }
+    .vertical-bar-label {
+      font-size: 11px;
+      color: #64748b;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .vertical-bar-value {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1f2937;
+      display: none; /* shown on hover via tooltip */
+    }
+    /* Donut in chart panel */
+    .chart-panel .donut-chart-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      min-height: 0;
+      padding: 24px;
+    }
+    .chart-panel .donut-chart {
+      flex-shrink: 0;
+      width: 260px;
+      height: 260px;
+    }
+    .chart-panel .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: center;
+      max-width: none;
     }
     /* Custom tooltip */
     #tooltip {
@@ -613,81 +794,6 @@
     #tooltip.visible {
       opacity: 1;
       visibility: visible;
-    }
-    /* Detail overlay */
-    #detail-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: rgba(0, 0, 0, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.2s ease, visibility 0.2s ease;
-    }
-    #detail-overlay.visible {
-      opacity: 1;
-      visibility: visible;
-    }
-    #detail-overlay .detail-panel {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-      max-width: 480px;
-      width: 100%;
-      max-height: 85vh;
-      overflow: auto;
-      position: relative;
-    }
-    #detail-overlay .detail-panel h3 {
-      font-size: 18px;
-      font-weight: 600;
-      color: #1f2937;
-      margin-bottom: 12px;
-      padding-right: 36px;
-    }
-    #detail-overlay .detail-panel p {
-      font-size: 14px;
-      color: #475569;
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-    #detail-overlay .detail-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 32px;
-      height: 32px;
-      border: none;
-      background: #f1f5f9;
-      color: #64748b;
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-    #detail-overlay .detail-close:hover {
-      background: #e2e8f0;
-      color: #1f2937;
-    }
-    #detail-overlay .detail-body {
-      padding: 24px;
-    }
-    #detail-overlay .detail-chart-placeholder {
-      height: 180px;
-      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-      border-radius: 8px;
-      margin-top: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #94a3b8;
-      font-size: 14px;
     }
   </style>
 </head>
@@ -729,7 +835,7 @@
     <div class="main-content">
       <div class="dashboard-row">
       <div class="summary-cards">
-        <div class="summary-card" data-card="wellness-rating" role="button" tabindex="0" aria-label="Wellness Rating – click for details">
+        <div class="summary-card selected" data-card="wellness-rating" role="button" tabindex="0" aria-label="Wellness Rating – click to show chart">
           <div class="summary-card-header light-purple">
             <i class="fas fa-heartbeat"></i>
             <span>Wellness Rating</span>
@@ -740,18 +846,18 @@
             <span class="summary-card-unit">Based on Student Averages</span>
           </div>
         </div>
-        <div class="summary-card" data-card="net-productive" role="button" tabindex="0" aria-label="Net Productive Time – click for details">
+        <div class="summary-card" data-card="net-productive" role="button" tabindex="0" aria-label="Net Productive Time – click to show chart">
           <div class="summary-card-header dark-blue">
             <i class="fas fa-clock"></i>
             <span>Net Productive Time</span>
             <i class="fas fa-info-circle summary-card-help" data-tooltip="Average daily time in learning resources minus time in passive and recreational sites"></i>
           </div>
           <div class="summary-card-body">
-            <span class="summary-card-value">+15</span>
+            <span class="summary-card-value">+38</span>
             <span class="summary-card-unit">Minutes/Day</span>
           </div>
         </div>
-        <div class="summary-card" data-card="student-usage" role="button" tabindex="0" aria-label="Student Usage – click for details">
+        <div class="summary-card" data-card="student-usage" role="button" tabindex="0" aria-label="Student Usage – click to show chart">
           <div class="summary-card-header light-pink">
             <i class="fas fa-users"></i>
             <span>Student Usage</span>
@@ -764,126 +870,165 @@
         </div>
       </div>
       <div class="chart-wrapper">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title-wrap">
-            <h2 class="card-title">Daily Minutes per Student by Category <i class="fas fa-info-circle info-icon" data-tooltip="Average daily minutes students spend in each category"></i></h2>
-          </div>
-          <div class="date-picker-widget" id="date-picker-widget" data-tooltip="Change month to view different period" aria-haspopup="dialog" aria-expanded="false">
-            <i class="fas fa-calendar-alt"></i>
-            <span id="date-picker-value">February 2026</span>
-            <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
+        <!-- Panel 1: Net Productive Time → Net Productive Time by Month (vertical bars) -->
+        <div id="chart-panel-net-productive" class="chart-panel">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Net Productive Time by Month <i class="fas fa-info-circle info-icon" data-tooltip="Average daily net productive minutes for each of the last 12 months"></i></h2>
+            </div>
+            <div class="vertical-bars-chart" id="vertical-bars-chart">
+              <div class="vertical-bars-inner" id="vertical-bars-inner"></div>
+            </div>
           </div>
         </div>
-        <div class="chart-bars">
-          <div class="chart-row" data-tooltip="Educational and Productivity: 59 min/day – learning apps and productive sites">
-            <span class="chart-value left"></span>
-            <div class="chart-bar-side left"></div>
-            <span class="chart-label">Educational and Productivity</span>
-            <div class="chart-bar-side right">
-              <div class="chart-bar positive-1" style="width: 90%;"></div>
+        <!-- Panel 2: Wellness Rating → Daily Minutes by Category -->
+        <div id="chart-panel-wellness-rating" class="chart-panel visible">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-wrap">
+                <h2 class="card-title">Daily Minutes per Student by Category <i class="fas fa-info-circle info-icon" data-tooltip="Average daily minutes students spend in each category"></i></h2>
+              </div>
+              <div class="date-picker-widget" id="date-picker-widget" data-tooltip="Change month to view different period" aria-haspopup="dialog" aria-expanded="false">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="date-picker-value">February 2026</span>
+                <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
+              </div>
             </div>
-            <span class="chart-value right">59 min</span>
-          </div>
-          <div class="chart-row" data-tooltip="Creative: 43 min/day – art, music, design tools">
-            <span class="chart-value left"></span>
-            <div class="chart-bar-side left"></div>
-            <span class="chart-label">Creative</span>
-            <div class="chart-bar-side right">
-              <div class="chart-bar positive-2" style="width: 66%;"></div>
+            <div class="chart-bars">
+              <div class="chart-row" data-tooltip="Educational and Productivity: 59 min/day – learning apps and productive sites">
+                <span class="chart-value left"></span>
+                <div class="chart-bar-side left"></div>
+                <span class="chart-label">Educational and Productivity</span>
+                <div class="chart-bar-side right">
+                  <div class="chart-bar positive-1" style="width: 90%;"></div>
+                </div>
+                <span class="chart-value right">59 min</span>
+              </div>
+              <div class="chart-row" data-tooltip="Creative: 43 min/day – art, music, design tools">
+                <span class="chart-value left"></span>
+                <div class="chart-bar-side left"></div>
+                <span class="chart-label">Creative</span>
+                <div class="chart-bar-side right">
+                  <div class="chart-bar positive-2" style="width: 66%;"></div>
+                </div>
+                <span class="chart-value right">43 min</span>
+              </div>
+              <div class="chart-row" data-tooltip="Search, Email and Reference: 35 min/day – neutral category">
+                <span class="chart-value left"></span>
+                <div class="chart-bar-side left"></div>
+                <span class="chart-label">Search, Email and Reference</span>
+                <div class="chart-bar-side right">
+                  <div class="chart-bar neutral" style="width: 54%;"></div>
+                </div>
+                <span class="chart-value right">35 min</span>
+              </div>
+              <div class="chart-row" data-tooltip="Passive and Recreational: 65 min/day – video, social, games">
+                <span class="chart-value left">65 min</span>
+                <div class="chart-bar-side left">
+                  <div class="chart-bar negative" style="width: 100%;"></div>
+                </div>
+                <span class="chart-label">Passive and Recreational</span>
+                <div class="chart-bar-side right"></div>
+                <span class="chart-value right"></span>
+              </div>
+              <div class="chart-row" data-tooltip="Excess Time: 22 min/day – beyond recommended limits">
+                <span class="chart-value left">22 min</span>
+                <div class="chart-bar-side left">
+                  <div class="chart-bar negative" style="width: 34%;"></div>
+                </div>
+                <span class="chart-label">Excess Time</span>
+                <div class="chart-bar-side right"></div>
+                <span class="chart-value right"></span>
+              </div>
+              <div class="chart-row" data-tooltip="Late Night Time: 0 min – usage outside recommended hours">
+                <span class="chart-value left">0 min</span>
+                <div class="chart-bar-side left">
+                  <div class="chart-bar negative" style="width: 0%;"></div>
+                </div>
+                <span class="chart-label">Late Night Time</span>
+                <div class="chart-bar-side right"></div>
+                <span class="chart-value right"></span>
+              </div>
             </div>
-            <span class="chart-value right">43 min</span>
-          </div>
-          <div class="chart-row" data-tooltip="Search, Email and Reference: 35 min/day – neutral category">
-            <span class="chart-value left"></span>
-            <div class="chart-bar-side left"></div>
-            <span class="chart-label">Search, Email and Reference</span>
-            <div class="chart-bar-side right">
-              <div class="chart-bar neutral" style="width: 54%;"></div>
-            </div>
-            <span class="chart-value right">35 min</span>
-          </div>
-          <div class="chart-row" data-tooltip="Passive and Recreational: 65 min/day – video, social, games">
-            <span class="chart-value left">65 min</span>
-            <div class="chart-bar-side left">
-              <div class="chart-bar negative" style="width: 100%;"></div>
-            </div>
-            <span class="chart-label">Passive and Recreational</span>
-            <div class="chart-bar-side right"></div>
-            <span class="chart-value right"></span>
-          </div>
-          <div class="chart-row" data-tooltip="Excess Time: 22 min/day – beyond recommended limits">
-            <span class="chart-value left">22 min</span>
-            <div class="chart-bar-side left">
-              <div class="chart-bar negative" style="width: 34%;"></div>
-            </div>
-            <span class="chart-label">Excess Time</span>
-            <div class="chart-bar-side right"></div>
-            <span class="chart-value right"></span>
-          </div>
-          <div class="chart-row" data-tooltip="Late Night Time: 0 min – usage outside recommended hours">
-            <span class="chart-value left">0 min</span>
-            <div class="chart-bar-side left">
-              <div class="chart-bar negative" style="width: 0%;"></div>
-            </div>
-            <span class="chart-label">Late Night Time</span>
-            <div class="chart-bar-side right"></div>
-            <span class="chart-value right"></span>
           </div>
         </div>
-      </div>
+        <!-- Panel 3: Student Usage → Donut (Wellness Distribution) -->
+        <div id="chart-panel-student-usage" class="chart-panel">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Wellness Distribution <i class="fas fa-info-circle info-icon" data-tooltip="Distribution of students by health rating"></i></h2>
+            </div>
+            <div class="donut-chart-wrap">
+              <div class="donut-chart" id="donut-chart" aria-hidden="true"></div>
+              <div class="donut-legend">
+                <div class="donut-legend-item" data-tooltip="60+ min Net Productive Time per day">
+                  <span class="donut-legend-dot healthy"></span>
+                  <span>Healthy (40%)</span>
+                </div>
+                <div class="donut-legend-item" data-tooltip="30–59 min Net Productive Time per day">
+                  <span class="donut-legend-dot slightly-healthy"></span>
+                  <span>Slightly Healthy (25%)</span>
+                </div>
+                <div class="donut-legend-item" data-tooltip="0–29 min Net Productive Time per day">
+                  <span class="donut-legend-dot slightly-unhealthy"></span>
+                  <span>Slightly Unhealthy (20%)</span>
+                </div>
+                <div class="donut-legend-item" data-tooltip="Less than 0 min Net Productive Time per day">
+                  <span class="donut-legend-dot unhealthy"></span>
+                  <span>Unhealthy (15%)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       </div>
       <div class="bottom-cards-row">
-      <div class="donut-card">
-        <div class="card-header">
-          <h2 class="card-title">Wellness Distribution <i class="fas fa-info-circle info-icon" data-tooltip="Distribution of students by health rating"></i></h2>
-        </div>
-        <div class="donut-chart-wrap">
-          <div class="donut-chart" id="donut-chart" aria-hidden="true"></div>
-          <div class="donut-legend">
-            <div class="donut-legend-item" data-tooltip="60+ min Net Productive Time per day">
-              <span class="donut-legend-dot healthy"></span>
-              <span>Healthy (40%)</span>
-            </div>
-            <div class="donut-legend-item" data-tooltip="30–59 min Net Productive Time per day">
-              <span class="donut-legend-dot slightly-healthy"></span>
-              <span>Slightly Healthy (25%)</span>
-            </div>
-            <div class="donut-legend-item" data-tooltip="0–29 min Net Productive Time per day">
-              <span class="donut-legend-dot slightly-unhealthy"></span>
-              <span>Slightly Unhealthy (20%)</span>
-            </div>
-            <div class="donut-legend-item" data-tooltip="Less than 0 min Net Productive Time per day">
-              <span class="donut-legend-dot unhealthy"></span>
-              <span>Unhealthy (15%)</span>
-            </div>
-          </div>
-        </div>
-      </div>
         <div class="list-card">
-          <h2 class="list-card-title">Most Used Unproductive Resources <i class="fas fa-info-circle info-icon" data-tooltip="Sites and apps classified as passive or recreational, by total minutes per day"></i></h2>
+          <h2 class="list-card-title">Most Used Passive and Recreational Resources <i class="fas fa-info-circle info-icon" data-tooltip="Sites and apps classified as passive or recreational, by total minutes per day"></i></h2>
           <table class="list-card-table">
             <thead>
               <tr>
                 <th>Name</th>
+                <th>Category</th>
                 <th>Minutes Per Day</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>YouTube</td><td>48</td></tr>
-              <tr><td>Netflix</td><td>35</td></tr>
-              <tr><td>TikTok</td><td>28</td></tr>
-              <tr><td>Instagram</td><td>22</td></tr>
-              <tr><td>Roblox</td><td>18</td></tr>
-              <tr class="more-row"><td>Discord</td><td>15</td></tr>
-              <tr class="more-row"><td>Twitter/X</td><td>12</td></tr>
-              <tr class="more-row"><td>Gaming (other)</td><td>9</td></tr>
+              <tr>
+                <td class="resource-name-cell"><a href="youtube.html" class="resource-name-link"><span class="resource-icon icon-youtube"><i class="fa-brands fa-youtube"></i></span><span>YouTube</span></a></td>
+                <td>Video</td><td>48</td>
+              </tr>
+              <tr>
+                <td class="resource-name-cell"><a href="netflix.html" class="resource-name-link"><span class="resource-icon icon-netflix"><i class="fas fa-film"></i></span><span>Netflix</span></a></td>
+                <td>Video</td><td>35</td>
+              </tr>
+              <tr>
+                <td class="resource-name-cell"><a href="tiktok.html" class="resource-name-link"><span class="resource-icon icon-tiktok"><i class="fa-brands fa-tiktok"></i></span><span>TikTok</span></a></td>
+                <td>Social Media</td><td>28</td>
+              </tr>
+              <tr>
+                <td class="resource-name-cell"><a href="instagram.html" class="resource-name-link"><span class="resource-icon icon-instagram"><i class="fa-brands fa-instagram"></i></span><span>Instagram</span></a></td>
+                <td>Social Media</td><td>22</td>
+              </tr>
+              <tr>
+                <td class="resource-name-cell"><a href="roblox.html" class="resource-name-link"><span class="resource-icon icon-gaming"><i class="fas fa-gamepad"></i></span><span>Roblox</span></a></td>
+                <td>Gaming</td><td>18</td>
+              </tr>
+              <tr class="more-row">
+                <td class="resource-name-cell"><a href="discord.html" class="resource-name-link"><span class="resource-icon icon-discord"><i class="fa-brands fa-discord"></i></span><span>Discord</span></a></td>
+                <td>Social Media</td><td>15</td>
+              </tr>
+              <tr class="more-row">
+                <td class="resource-name-cell"><a href="twitter-x.html" class="resource-name-link"><span class="resource-icon icon-twitter"><i class="fa-brands fa-x-twitter"></i></span><span>Twitter/X</span></a></td>
+                <td>Social Media</td><td>12</td>
+              </tr>
             </tbody>
           </table>
-          <span class="list-card-more" data-more="3" data-label-more="+ 3 more" data-label-less="- 3 less"><span class="list-card-more-text">+ 3 more</span> <i class="fas fa-chevron-down"></i></span>
+          <span class="list-card-more" data-more="2" data-label-more="+ 2 more" data-label-less="- 2 less"><span class="list-card-more-text">+ 2 more</span> <i class="fas fa-chevron-down"></i></span>
         </div>
-        <div class="list-card">
+        <a href="students-unhealthy.html" class="list-card-link">
+        <div class="list-card" id="list-card-unhealthy">
           <h2 class="list-card-title">Students with Most Unhealthy Usage <i class="fas fa-info-circle info-icon" data-tooltip="Students with more usage of unproductive resources than productive resources"></i></h2>
           <table class="list-card-table">
             <thead>
@@ -906,35 +1051,10 @@
           </table>
           <span class="list-card-more" data-more="4" data-label-more="+ 4 more" data-label-less="- 4 less"><span class="list-card-more-text">+ 4 more</span> <i class="fas fa-chevron-down"></i></span>
         </div>
+        </a>
       </div>
     </div>
 
-    <!-- Detail overlay (shown when a summary card is clicked) -->
-    <div id="detail-overlay" aria-hidden="true" aria-modal="true" role="dialog" aria-labelledby="detail-title">
-      <div class="detail-panel" id="detail-panel-wellness-rating" hidden>
-        <button type="button" class="detail-close" aria-label="Close"><i class="fas fa-times"></i></button>
-        <div class="detail-body">
-          <h3 id="detail-title-wellness-rating">Wellness Rating</h3>
-          <p>This rating is derived from each student’s Net Productive Time. Healthy = 60+ min, Slightly Healthy = 30–59 min, Slightly Unhealthy = 0–29 min, Unhealthy = less than 0 min.</p>
-          <div class="detail-chart-placeholder">Trend: Wellness rating over last 6 months</div>
-        </div>
-      </div>
-      <div class="detail-panel" id="detail-panel-net-productive" hidden>
-        <button type="button" class="detail-close" aria-label="Close"><i class="fas fa-times"></i></button>
-        <div class="detail-body">
-          <h3 id="detail-title-net-productive">Net Productive Time</h3>
-          <p>Average daily minutes in learning and productive resources, minus time in passive and recreational sites. Positive values indicate more productive than unproductive time.</p>
-          <div class="detail-chart-placeholder">Trend: Net productive minutes over time</div>
-        </div>
-      </div>
-      <div class="detail-panel" id="detail-panel-student-usage" hidden>
-        <button type="button" class="detail-close" aria-label="Close"><i class="fas fa-times"></i></button>
-        <div class="detail-body">
-          <h3 id="detail-title-student-usage">Student Usage</h3>
-          <p>Percentage of students whose usage is classified as Healthy (Net Productive Time ≥ 60 min per day). Use this to see how many students are meeting wellness targets.</p>
-          <div class="detail-chart-placeholder">Breakdown: Healthy vs other categories</div>
-        </div>
-      </div>
     </div>
   </main>
 
@@ -1035,7 +1155,9 @@
 
       // List card "+ N more" expand/collapse
       document.querySelectorAll('.list-card-more').forEach(function (el) {
-        el.addEventListener('click', function () {
+        el.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
           var card = el.closest('.list-card');
           var textEl = el.querySelector('.list-card-more-text');
           if (!card || !textEl) return;
@@ -1044,51 +1166,88 @@
         });
       });
 
-      // —— Detail overlay (clickable cards) ——
-      var overlay = document.getElementById('detail-overlay');
-      var panels = {
-        'wellness-rating': document.getElementById('detail-panel-wellness-rating'),
-        'net-productive': document.getElementById('detail-panel-net-productive'),
-        'student-usage': document.getElementById('detail-panel-student-usage')
+      // —— Chart panel switching (summary cards) ——
+      var chartPanels = {
+        'wellness-rating': document.getElementById('chart-panel-wellness-rating'),
+        'net-productive': document.getElementById('chart-panel-net-productive'),
+        'student-usage': document.getElementById('chart-panel-student-usage')
       };
 
-      function openDetail(cardId) {
-        var panel = panels[cardId];
+      function showChartPanel(cardId) {
+        var panel = chartPanels[cardId];
         if (!panel) return;
-        Object.keys(panels).forEach(function (id) { panels[id].setAttribute('hidden', ''); });
-        panel.removeAttribute('hidden');
-        overlay.classList.add('visible');
-        overlay.setAttribute('aria-hidden', 'false');
+        Object.keys(chartPanels).forEach(function (id) {
+          var p = chartPanels[id];
+          if (p) p.classList.remove('visible');
+        });
+        panel.classList.add('visible');
+        document.querySelectorAll('.summary-card[data-card]').forEach(function (c) {
+          c.classList.toggle('selected', c.getAttribute('data-card') === cardId);
+        });
       }
-
-      function closeDetail() {
-        overlay.classList.remove('visible');
-        overlay.setAttribute('aria-hidden', 'true');
-        Object.keys(panels).forEach(function (id) { panels[id].setAttribute('hidden', ''); });
-      }
-
-      overlay.addEventListener('click', function (e) {
-        if (e.target === overlay) closeDetail();
-      });
-
-      overlay.querySelectorAll('.detail-close').forEach(function (btn) {
-        btn.addEventListener('click', closeDetail);
-      });
 
       document.querySelectorAll('.summary-card[data-card]').forEach(function (card) {
         var cardId = card.getAttribute('data-card');
-        card.addEventListener('click', function () { openDetail(cardId); });
+        card.addEventListener('click', function () { showChartPanel(cardId); });
         card.addEventListener('keydown', function (e) {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            openDetail(cardId);
+            showChartPanel(cardId);
           }
         });
       });
 
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && overlay.classList.contains('visible')) closeDetail();
-      });
+      // —— Vertical bar chart (12 months Net Productive Time) ——
+      (function () {
+        var MONTH_LABELS = ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'];
+        var VALUES = [-5, 15, 28, 35, 42, 55, 48, 65, 72, 58, 45, 38]; // last 12 months, range up to 75 min
+        var maxVal = 75;
+        var minVal = -10;
+        var range = maxVal - minVal;
+        var container = document.getElementById('vertical-bars-inner');
+        if (!container) return;
+        VALUES.forEach(function (val, i) {
+          var wrap = document.createElement('div');
+          wrap.className = 'vertical-bar-wrap' + (val < 0 ? ' negative' : '');
+          var zones = document.createElement('div');
+          zones.className = 'vertical-bar-zones';
+          var zonePos = document.createElement('div');
+          zonePos.className = 'vertical-bar-zone-positive';
+          var baseline = document.createElement('div');
+          baseline.className = 'vertical-bar-baseline';
+          var zoneNeg = document.createElement('div');
+          zoneNeg.className = 'vertical-bar-zone-negative';
+          var bar = document.createElement('div');
+          var rangeClass = val >= 60 ? 'range-60-plus' : val >= 15 ? 'range-15-59' : val >= 0 ? 'range-0-15' : 'range-negative';
+          bar.className = 'vertical-bar ' + rangeClass;
+          var barPct;
+          if (val >= 0) {
+            barPct = Math.max(5, Math.min(100, (val / maxVal) * 100));
+            bar.style.flex = '0 0 ' + barPct + '%';
+            zonePos.appendChild(bar);
+          } else {
+            barPct = Math.max(5, Math.min(100, (Math.abs(val) / Math.abs(minVal)) * 100));
+            bar.style.flex = '0 0 ' + barPct + '%';
+            zoneNeg.appendChild(bar);
+          }
+          zones.appendChild(zonePos);
+          zones.appendChild(baseline);
+          zones.appendChild(zoneNeg);
+          var valueEl = document.createElement('div');
+          valueEl.className = 'vertical-bar-value';
+          valueEl.textContent = (val >= 0 ? '+' : '') + val;
+          var label = document.createElement('div');
+          label.className = 'vertical-bar-label';
+          label.textContent = MONTH_LABELS[i];
+          var tooltipText = MONTH_LABELS[i] + ': ' + (val >= 0 ? '+' : '') + val + ' min';
+          wrap.appendChild(zones);
+          wrap.appendChild(valueEl);
+          wrap.appendChild(label);
+          wrap.addEventListener('mouseenter', function (e) { showTooltip(e, tooltipText); });
+          wrap.addEventListener('mouseleave', hideTooltip);
+          container.appendChild(wrap);
+        });
+      })();
 
       // —— Date picker calendar ——
       var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

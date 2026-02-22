@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram - Digital Health</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+    }
+    .sidebar {
+      width: 260px;
+      min-height: 100vh;
+      background: #e8e8e8;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .logo {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .logo-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .user-profile {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #ddd;
+    }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: #cbd5e1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+    }
+    .user-info {
+      flex: 1;
+    }
+    .user-name {
+      font-weight: 600;
+      color: #1f2937;
+      font-size: 14px;
+    }
+    .user-org {
+      font-size: 12px;
+      color: #64748b;
+    }
+    .user-chevron {
+      color: #94a3b8;
+      font-size: 12px;
+    }
+    .nav-list {
+      flex: 1;
+      padding: 12px 0;
+      overflow-y: auto;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      color: #475569;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+    }
+    .nav-item:hover {
+      background: #ddd;
+      color: #1e293b;
+    }
+    .nav-item.active {
+      background: #2563eb;
+      color: white;
+      border-left-color: #1d4ed8;
+    }
+    .nav-item i {
+      width: 20px;
+      text-align: center;
+      font-size: 16px;
+    }
+    .nav-item .chevron {
+      margin-left: auto;
+      font-size: 10px;
+      opacity: 0.8;
+    }
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid #ddd;
+    }
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #475569;
+    }
+    .theme-toggle input {
+      width: 44px;
+      height: 24px;
+      accent-color: #2563eb;
+    }
+    .main {
+      flex: 1;
+      background: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .main-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .back-arrow {
+      color: #64748b;
+      font-size: 20px;
+      text-decoration: none;
+    }
+    .back-arrow:hover {
+      color: #1f2937;
+    }
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .main-content {
+      flex: 1 1 auto;
+      padding: 32px;
+      min-height: 0;
+    }
+    .resource-intro {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 24px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      margin-bottom: 24px;
+    }
+    .resource-intro-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      flex-shrink: 0;
+      background: #fef2f2;
+      color: #e53935;
+    }
+    .resource-intro-logo.logo-instagram { background: #fdf2f8; color: #e4405f; }
+    .resource-intro-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .resource-intro-category {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+    .resource-intro-desc {
+      font-size: 15px;
+      line-height: 1.5;
+      color: #475569;
+    }
+    .resource-intro-eval {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .resource-intro-eval.collapsed .resource-intro-eval-content {
+      display: none;
+    }
+    .eval-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 0;
+      margin: 0 0 12px 0;
+      border: none;
+      background: none;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      cursor: pointer;
+      text-align: left;
+    }
+    .eval-toggle:hover {
+      color: #1d4ed8;
+    }
+    .eval-toggle .chevron {
+      font-size: 10px;
+      color: #64748b;
+      transition: transform 0.2s ease;
+    }
+    .resource-intro-eval:not(.collapsed) .eval-toggle .chevron {
+      transform: rotate(180deg);
+    }
+    .resource-intro-eval ul {
+      margin: 0 0 12px 0;
+      padding-left: 20px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #475569;
+    }
+    .resource-intro-eval ul:last-child {
+      margin-bottom: 0;
+    }
+    .resource-intro-eval .eval-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+    .resource-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .resource-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .resource-card-title .info-icon {
+      color: #94a3b8;
+      font-size: 14px;
+      cursor: help;
+    }
+    .resource-card-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .resource-card-header-row .resource-card-title {
+      margin-bottom: 0;
+    }
+    .usage-view-toggle {
+      display: inline-flex;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+      background: #f1f5f9;
+    }
+    .usage-view-toggle [role="tab"] {
+      padding: 8px 14px;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    }
+    .usage-view-toggle [role="tab"]:hover {
+      color: #374151;
+    }
+    .usage-view-toggle [role="tab"][aria-selected="true"] {
+      background: #fff;
+      color: #2563eb;
+      border: 1px solid #2563eb;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    .usage-view-toggle [role="tab"] i {
+      font-size: 14px;
+    }
+    .usage-chart-panel {
+      display: none;
+    }
+    .usage-chart-panel.visible {
+      display: block;
+    }
+    .chart-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .chart-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chart-bar-side {
+      flex: 1;
+      min-width: 0;
+      height: 24px;
+      background: #f1f5f9;
+      display: flex;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .chart-bar-side.right {
+      justify-content: flex-start;
+    }
+    .chart-label {
+      width: 80px;
+      flex-shrink: 0;
+      font-size: 14px;
+      color: #374151;
+    }
+    .chart-bar {
+      height: 100%;
+      border-radius: 4px;
+      min-width: 4px;
+      background: #ea580c;
+      transition: width 0.4s ease;
+    }
+    .chart-value {
+      width: 56px;
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1f2937;
+      text-align: right;
+    }
+    .actions-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .actions-row .resource-card {
+      flex: 1 1 0;
+      min-width: 220px;
+      margin-bottom: 0;
+    }
+    .actions-row .resource-card.card-tint-green {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+    .actions-row .resource-card.card-tint-yellow {
+      background: #fefce8;
+      border-color: #fef08a;
+    }
+    .actions-row .resource-card.card-tint-red {
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+    .action-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 16px;
+    }
+    .action-card-body {
+      font-size: 14px;
+      color: #475569;
+    }
+    .action-card-body .form-group {
+      margin-bottom: 16px;
+    }
+    .action-card-body .form-group:last-of-type {
+      margin-bottom: 0;
+    }
+    .action-card-body label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+    .action-card-body select,
+    .action-card-body input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 14px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      background: #fff;
+      color: #1f2937;
+    }
+    .action-card-body select:focus,
+    .action-card-body input[type="number"]:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #1d4ed8;
+    }
+    .btn-danger {
+      background: #dc2626;
+      color: #fff;
+    }
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
+    .action-card-body .help-text {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    .reclassify-explanation {
+      font-size: 13px;
+      color: #475569;
+      line-height: 1.45;
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border-radius: 6px;
+      border-left: 3px solid #2563eb;
+      display: none;
+    }
+    .reclassify-explanation.visible {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">N</div>
+      <span class="logo-text">Analytics+</span>
+    </div>
+    <div class="user-profile">
+      <div class="user-avatar">
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="user-info">
+        <div class="user-name">Alex Poon</div>
+        <div class="user-org">ClassLink</div>
+      </div>
+      <i class="fas fa-chevron-right user-chevron"></i>
+    </div>
+    <nav class="nav-list">
+      <a class="nav-item" href="#"><i class="fas fa-th-large"></i> Overview</a>
+      <a class="nav-item" href="#"><i class="fas fa-chart-bar"></i> Custom Dashboards <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-list"></i> Logins <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-school"></i> Schools <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-users"></i> Users <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-folder"></i> Digital Resources</a>
+      <a class="nav-item active" href="index.html"><i class="fas fa-heartbeat"></i> Digital Wellness</a>
+      <a class="nav-item" href="#"><i class="fas fa-coins"></i> Costs</a>
+      <a class="nav-item" href="#"><i class="fas fa-cloud-download-alt"></i> Exports</a>
+      <a class="nav-item" href="#"><i class="fas fa-clock"></i> Audit Logs <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-cloud"></i> Help</a>
+      <a class="nav-item" href="#"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="main-header">
+      <a href="index.html" class="back-arrow" aria-label="Back to Digital Wellness"><i class="fas fa-arrow-left"></i></a>
+      <h1 class="page-title">Instagram</h1>
+    </header>
+    <div class="main-content">
+      <div class="resource-intro">
+        <div class="resource-intro-logo logo-instagram">
+          <i class="fa-brands fa-instagram"></i>
+        </div>
+        <div class="resource-intro-body">
+          <span class="resource-intro-category">Social Media</span>
+          <p class="resource-intro-desc">Instagram is a photo and video sharing app where users post stories, reels, and feeds.</p>
+          <div class="resource-intro-eval collapsed" id="resource-intro-eval">
+            <button type="button" class="eval-toggle" id="eval-toggle" aria-expanded="false" aria-controls="resource-intro-eval-content">
+              Educational value considerations <i class="fas fa-chevron-down chevron" aria-hidden="true"></i>
+            </button>
+            <div class="resource-intro-eval-content" id="resource-intro-eval-content">
+              <div class="eval-label">Pros</div>
+              <ul class="pros">
+                <li>Can support art, photography, and visual storytelling in the curriculum.</li>
+                <li>Some educators and institutions use it for announcements and project showcases.</li>
+              </ul>
+              <div class="eval-label">Cons</div>
+              <ul class="cons">
+                <li>Infinite scroll and reels encourage passive consumption and time away from learning.</li>
+                <li>Ads and suggested content are not curated for educational use.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="resource-card">
+        <div class="resource-card-header-row">
+          <h2 class="resource-card-title">Usage <i class="fas fa-info-circle info-icon" title="Average daily minutes per student"></i></h2>
+          <div class="usage-view-toggle" role="tablist" aria-label="Usage view">
+            <button type="button" role="tab" id="usage-tab-grade" aria-selected="true" aria-controls="usage-panel-grade" data-panel="usage-panel-grade">
+              <i class="fas fa-chart-bar" aria-hidden="true"></i> By Grade
+            </button>
+            <button type="button" role="tab" id="usage-tab-schools" aria-selected="false" aria-controls="usage-panel-schools" data-panel="usage-panel-schools">
+              <i class="fas fa-school" aria-hidden="true"></i> By Schools
+            </button>
+          </div>
+        </div>
+        <div id="usage-panel-grade" class="usage-chart-panel visible" role="tabpanel" aria-labelledby="usage-tab-grade">
+          <div class="chart-bars">
+            <div class="chart-row">
+              <span class="chart-label">Grade 6</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 80%;"></div>
+              </div>
+              <span class="chart-value">48 min</span>
+            </div>
+            <div class="chart-row">
+              <span class="chart-label">Grade 7</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 86.67%;"></div>
+              </div>
+              <span class="chart-value">52 min</span>
+            </div>
+            <div class="chart-row">
+              <span class="chart-label">Grade 8</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 75%;"></div>
+              </div>
+              <span class="chart-value">45 min</span>
+            </div>
+            <div class="chart-row">
+              <span class="chart-label">Grade 9</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 96.67%;"></div>
+              </div>
+              <span class="chart-value">58 min</span>
+            </div>
+            <div class="chart-row">
+              <span class="chart-label">Grade 10</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 68.33%;"></div>
+              </div>
+              <span class="chart-value">41 min</span>
+            </div>
+            <div class="chart-row">
+              <span class="chart-label">Grade 11</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 91.67%;"></div>
+              </div>
+              <span class="chart-value">55 min</span>
+            </div>
+            <div class="chart-row">
+              <span class="chart-label">Grade 12</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 63.33%;"></div>
+              </div>
+              <span class="chart-value">38 min</span>
+            </div>
+          </div>
+        </div>
+        <div id="usage-panel-schools" class="usage-chart-panel" role="tabpanel" aria-labelledby="usage-tab-schools">
+          <div class="chart-bars">
+            <div class="chart-row">
+              <span class="chart-label">Lincoln High</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 88%;"></div>
+              </div>
+              <span class="chart-value">53 min</span>
+            </div>
+            <div class="chart-row">
+              <span class="chart-label">Washington MS</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 76.67%;"></div>
+              </div>
+              <span class="chart-value">46 min</span>
+            </div>
+            <div class="chart-row">
+              <span class="chart-label">Roosevelt Elem</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 65%;"></div>
+              </div>
+              <span class="chart-value">39 min</span>
+            </div>
+            <div class="chart-row">
+              <span class="chart-label">Jefferson Acad</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 93.33%;"></div>
+              </div>
+              <span class="chart-value">56 min</span>
+            </div>
+            <div class="chart-row">
+              <span class="chart-label">Kennedy Elem</span>
+              <div class="chart-bar-side right">
+                <div class="chart-bar" style="width: 58.33%;"></div>
+              </div>
+              <span class="chart-value">35 min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="actions-row">
+        <div class="resource-card card-tint-green">
+          <h2 class="action-card-title">Reclassify Resource</h2>
+          <div class="action-card-body">
+            <div class="form-group">
+              <label for="reclassify-select">New category</label>
+              <select id="reclassify-select">
+                <option value="">Select category</option>
+                <option value="educational">Educational and Productivity</option>
+                <option value="creative">Creative</option>
+                <option value="search">Search, Email and Reference</option>
+              </select>
+            </div>
+            <div id="reclassify-explanation" class="reclassify-explanation" role="status" aria-live="polite"></div>
+            <button type="button" class="btn btn-primary">Reclassify</button>
+          </div>
+        </div>
+        <div class="resource-card card-tint-yellow">
+          <h2 class="action-card-title">Limit Daily Usage</h2>
+          <div class="action-card-body">
+            <div class="form-group">
+              <label for="limit-minutes">Minutes per day allowed</label>
+              <input type="number" id="limit-minutes" min="1" max="120" value="15" aria-describedby="limit-help">
+              <div class="help-text" id="limit-help">Students will be limited to this many minutes per day on this resource.</div>
+            </div>
+            <button type="button" class="btn btn-primary">Apply limit</button>
+          </div>
+        </div>
+        <div class="resource-card card-tint-red">
+          <h2 class="action-card-title">Block Resource</h2>
+          <div class="action-card-body">
+            <p>Block this resource for all students. They will not be able to access it until the block is removed.</p>
+            <button type="button" class="btn btn-danger">Block resource</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var select = document.getElementById('reclassify-select');
+      var explanation = document.getElementById('reclassify-explanation');
+      var messages = {
+        educational: 'Time spent on this resource will count positively toward Net Productive Time.',
+        creative: 'Time spent on this resource will count positively toward Net Productive Time.',
+        search: 'Time spent on this resource will count neither positively nor negatively toward Net Productive Time.'
+      };
+      function updateExplanation() {
+        var val = select.value;
+        if (val && messages[val]) {
+          explanation.textContent = messages[val];
+          explanation.classList.add('visible');
+        } else {
+          explanation.textContent = '';
+          explanation.classList.remove('visible');
+        }
+      }
+      select.addEventListener('change', updateExplanation);
+      updateExplanation();
+    })();
+    (function () {
+      var evalBlock = document.getElementById('resource-intro-eval');
+      var toggleBtn = document.getElementById('eval-toggle');
+      var content = document.getElementById('resource-intro-eval-content');
+      if (toggleBtn && evalBlock && content) {
+        toggleBtn.addEventListener('click', function () {
+          var collapsed = evalBlock.classList.toggle('collapsed');
+          toggleBtn.setAttribute('aria-expanded', !collapsed);
+        });
+      }
+    })();
+    (function () {
+      var tabGrade = document.getElementById('usage-tab-grade');
+      var tabSchools = document.getElementById('usage-tab-schools');
+      var panelGrade = document.getElementById('usage-panel-grade');
+      var panelSchools = document.getElementById('usage-panel-schools');
+      function showPanel(panel) {
+        if (panelGrade) panelGrade.classList.toggle('visible', panel === panelGrade);
+        if (panelSchools) panelSchools.classList.toggle('visible', panel === panelSchools);
+        if (tabGrade) tabGrade.setAttribute('aria-selected', panel === panelGrade ? 'true' : 'false');
+        if (tabSchools) tabSchools.setAttribute('aria-selected', panel === panelSchools ? 'true' : 'false');
+      }
+      if (tabGrade) tabGrade.addEventListener('click', function () { showPanel(panelGrade); });
+      if (tabSchools) tabSchools.addEventListener('click', function () { showPanel(panelSchools); });
+    })();
+  </script>
+</body>
+</html>
