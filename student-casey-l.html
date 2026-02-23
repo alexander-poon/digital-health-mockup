@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casey L. - Digital Health</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+    }
+    .sidebar {
+      width: 260px;
+      min-height: 100vh;
+      background: #e8e8e8;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .logo {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .logo-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .user-profile {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #ddd;
+    }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: #cbd5e1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+    }
+    .user-info {
+      flex: 1;
+    }
+    .user-name {
+      font-weight: 600;
+      color: #1f2937;
+      font-size: 14px;
+    }
+    .user-org {
+      font-size: 12px;
+      color: #64748b;
+    }
+    .user-chevron {
+      color: #94a3b8;
+      font-size: 12px;
+    }
+    .nav-list {
+      flex: 1;
+      padding: 12px 0;
+      overflow-y: auto;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      color: #475569;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      border-left: 3px solid transparent;
+    }
+    .nav-item:hover {
+      background: #ddd;
+      color: #1e293b;
+    }
+    .nav-item.active {
+      background: #2563eb;
+      color: white;
+      border-left-color: #1d4ed8;
+    }
+    .nav-item i {
+      width: 20px;
+      text-align: center;
+      font-size: 16px;
+    }
+    .nav-item .chevron {
+      margin-left: auto;
+      font-size: 10px;
+      opacity: 0.8;
+    }
+    .main {
+      flex: 1;
+      background: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .main-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .back-arrow {
+      color: #64748b;
+      font-size: 20px;
+      text-decoration: none;
+    }
+    .back-arrow:hover {
+      color: #1f2937;
+    }
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .main-content {
+      flex: 1 1 auto;
+      padding: 32px;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .student-info-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      padding: 16px 20px;
+      flex-shrink: 0;
+    }
+    .student-info-card .student-info-row {
+      display: flex;
+      gap: 24px;
+      font-size: 14px;
+      color: #374151;
+    }
+    .student-info-card .student-info-row span strong {
+      color: #1f2937;
+    }
+    .insight-cards-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .insight-card {
+      flex: 1;
+      min-width: 200px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      padding: 20px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #374151;
+    }
+    .insight-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+    .insight-card-title i {
+      color: #eab308;
+    }
+    @media (max-width: 900px) {
+      .insight-cards-row { flex-direction: column; }
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .card-title .info-icon {
+      color: #94a3b8;
+      font-size: 14px;
+      cursor: help;
+    }
+    .chart-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .chart-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chart-bar-side {
+      flex: 1;
+      min-width: 0;
+      height: 24px;
+      background: #fff;
+      display: flex;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .chart-bar-side.left { justify-content: flex-end; }
+    .chart-bar-side.right { justify-content: flex-start; }
+    .chart-label {
+      width: 200px;
+      flex-shrink: 0;
+      font-size: 14px;
+      color: #374151;
+      text-align: center;
+      padding: 0 8px;
+    }
+    .chart-bar {
+      height: 100%;
+      border-radius: 4px;
+      min-width: 4px;
+      transition: width 0.4s ease;
+    }
+    .chart-bar.positive-1 { background: #1d4ed8; }
+    .chart-bar.positive-2 { background: #0d9488; }
+    .chart-bar.neutral { background: #64748b; }
+    .chart-bar.negative { background: #ea580c; }
+    .chart-value {
+      width: 56px;
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .chart-value.left { text-align: left; }
+    .chart-value.right { text-align: right; }
+    .two-cards-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .two-cards-row .card {
+      flex: 1;
+      min-width: 280px;
+    }
+    @media (max-width: 700px) {
+      .two-cards-row { flex-direction: column; }
+    }
+    .vertical-bars-chart {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      padding-top: 8px;
+    }
+    .vertical-bars-inner {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 8px;
+      flex: 1;
+      min-height: 220px;
+      padding: 0 8px 8px;
+    }
+    .vertical-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+    }
+    .vertical-bar-wrap.negative .vertical-bar-value { color: #ea580c; }
+    .vertical-bar-zones {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      width: 100%;
+      align-items: center;
+    }
+    .vertical-bar-zone-positive {
+      flex: 0 0 86%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 0;
+      width: 100%;
+      align-items: center;
+    }
+    .vertical-bar-baseline {
+      flex: 0 0 2px;
+      width: 100%;
+      max-width: 48px;
+      background: #94a3b8;
+      align-self: center;
+    }
+    .vertical-bar-zone-negative {
+      flex: 0 0 12%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      min-height: 0;
+      width: 100%;
+      align-items: center;
+    }
+    .vertical-bar {
+      width: 100%;
+      max-width: 40px;
+      min-height: 8px;
+      flex-shrink: 0;
+      border-radius: 4px 4px 0 0;
+      align-self: center;
+      transition: flex-basis 0.3s ease;
+    }
+    .vertical-bar.range-negative {
+      background: #ea580c;
+      border-radius: 0 0 4px 4px;
+    }
+    .vertical-bar.range-0-15 { background: #64748b; }
+    .vertical-bar.range-15-59 { background: #0d9488; }
+    .vertical-bar.range-60-plus { background: #1d4ed8; }
+    .vertical-bar-label {
+      font-size: 11px;
+      color: #64748b;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .vertical-bar-value {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .contributors-list { list-style: none; }
+    .contributors-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: 14px;
+      color: #374151;
+    }
+    .contributors-list li:last-child { border-bottom: none; }
+    .contributors-list .contributor-sign {
+      font-weight: 700;
+      min-width: 1.2em;
+    }
+    .contributors-list .contributor-sign.positive { color: #0d9488; }
+    .contributors-list .contributor-sign.negative { color: #ea580c; }
+    .contributors-list .contributor-name { flex: 1; }
+    .contributors-list .contributor-mins { font-weight: 600; color: #1f2937; }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">N</div>
+      <span class="logo-text">Analytics+</span>
+    </div>
+    <div class="user-profile">
+      <div class="user-avatar">
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="user-info">
+        <div class="user-name">Alex Poon</div>
+        <div class="user-org">ClassLink</div>
+      </div>
+      <i class="fas fa-chevron-right user-chevron"></i>
+    </div>
+    <nav class="nav-list">
+      <a class="nav-item" href="#"><i class="fas fa-th-large"></i> Overview</a>
+      <a class="nav-item" href="#"><i class="fas fa-chart-bar"></i> Custom Dashboards <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-list"></i> Logins <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-school"></i> Schools <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-users"></i> Users <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-folder"></i> Digital Resources</a>
+      <a class="nav-item active" href="index.html"><i class="fas fa-heartbeat"></i> Digital Wellness</a>
+      <a class="nav-item" href="#"><i class="fas fa-coins"></i> Costs</a>
+      <a class="nav-item" href="#"><i class="fas fa-cloud-download-alt"></i> Exports</a>
+      <a class="nav-item" href="#"><i class="fas fa-clock"></i> Audit Logs <i class="fas fa-chevron-down chevron"></i></a>
+      <a class="nav-item" href="#"><i class="fas fa-cloud"></i> Help</a>
+      <a class="nav-item" href="#"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="main-header">
+      <a href="index.html" class="back-arrow" aria-label="Back to Digital Wellness"><i class="fas fa-arrow-left"></i></a>
+      <h1 class="page-title">Casey L.</h1>
+    </header>
+    <div class="main-content">
+      <div class="student-info-card">
+        <div class="student-info-row">
+          <span><strong>School:</strong> Roosevelt Elem</span>
+          <span><strong>Grade:</strong> 9</span>
+        </div>
+      </div>
+      <div class="insight-cards-row">
+        <div class="insight-card">
+          <div class="insight-card-title"><i class="fas fa-lightbulb" aria-hidden="true"></i> Instagram time rivals educational time</div>
+          Casey spends 50 minutes per day on i-Ready, but also spends 48 minutes a day on Instagram. Consider reducing social media to keep educational time ahead.
+        </div>
+        <div class="insight-card">
+          <div class="insight-card-title"><i class="fas fa-lightbulb" aria-hidden="true"></i> Late night usage</div>
+          Casey spends an average of 29 minutes per day online after 10 pm. Consider improving digital health by reducing late night usage.
+        </div>
+        <div class="insight-card">
+          <div class="insight-card-title"><i class="fas fa-lightbulb" aria-hidden="true"></i> Excess time beyond limits</div>
+          Casey's excess time (beyond recommended limits) is 30 minutes per day. Consider setting daily limits for recreational apps.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Casey's Daily Minutes by Category <i class="fas fa-info-circle info-icon" title="Average daily minutes in each category for this student"></i></h2>
+        </div>
+        <div class="chart-bars">
+          <div class="chart-row">
+            <span class="chart-value left"></span>
+            <div class="chart-bar-side left"></div>
+            <span class="chart-label">Educational and Productivity</span>
+            <div class="chart-bar-side right">
+              <div class="chart-bar positive-1" style="width: 83%;"></div>
+            </div>
+            <span class="chart-value right">50 min</span>
+          </div>
+          <div class="chart-row">
+            <span class="chart-value left"></span>
+            <div class="chart-bar-side left"></div>
+            <span class="chart-label">Creative</span>
+            <div class="chart-bar-side right">
+              <div class="chart-bar positive-2" style="width: 30%;"></div>
+            </div>
+            <span class="chart-value right">18 min</span>
+          </div>
+          <div class="chart-row">
+            <span class="chart-value left"></span>
+            <div class="chart-bar-side left"></div>
+            <span class="chart-label">Search, Email and Reference</span>
+            <div class="chart-bar-side right">
+              <div class="chart-bar neutral" style="width: 13%;"></div>
+            </div>
+            <span class="chart-value right">8 min</span>
+          </div>
+          <div class="chart-row">
+            <span class="chart-value left">48 min</span>
+            <div class="chart-bar-side left">
+              <div class="chart-bar negative" style="width: 80%;"></div>
+            </div>
+            <span class="chart-label">Passive and Recreational</span>
+            <div class="chart-bar-side right"></div>
+            <span class="chart-value right"></span>
+          </div>
+          <div class="chart-row">
+            <span class="chart-value left">30 min</span>
+            <div class="chart-bar-side left">
+              <div class="chart-bar negative" style="width: 50%;"></div>
+            </div>
+            <span class="chart-label">Excess Time</span>
+            <div class="chart-bar-side right"></div>
+            <span class="chart-value right"></span>
+          </div>
+          <div class="chart-row">
+            <span class="chart-value left">29 min</span>
+            <div class="chart-bar-side left">
+              <div class="chart-bar negative" style="width: 48%;"></div>
+            </div>
+            <span class="chart-label">Late Night Time</span>
+            <div class="chart-bar-side right"></div>
+            <span class="chart-value right"></span>
+          </div>
+        </div>
+      </div>
+      <div class="two-cards-row">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Net Productive Time (Last 6 Months) <i class="fas fa-info-circle info-icon" title="Monthly net productive time for this student"></i></h2>
+          </div>
+          <div class="vertical-bars-chart">
+            <div class="vertical-bars-inner">
+              <div class="vertical-bar-wrap negative">
+                <div class="vertical-bar-zones">
+                  <div class="vertical-bar-zone-positive"></div>
+                  <div class="vertical-bar-baseline"></div>
+                  <div class="vertical-bar-zone-negative">
+                    <div class="vertical-bar range-negative" style="flex: 0 0 51%;"></div>
+                  </div>
+                </div>
+                <div class="vertical-bar-value">-18</div>
+                <div class="vertical-bar-label">Sep</div>
+              </div>
+              <div class="vertical-bar-wrap negative">
+                <div class="vertical-bar-zones">
+                  <div class="vertical-bar-zone-positive"></div>
+                  <div class="vertical-bar-baseline"></div>
+                  <div class="vertical-bar-zone-negative">
+                    <div class="vertical-bar range-negative" style="flex: 0 0 63%;"></div>
+                  </div>
+                </div>
+                <div class="vertical-bar-value">-22</div>
+                <div class="vertical-bar-label">Oct</div>
+              </div>
+              <div class="vertical-bar-wrap negative">
+                <div class="vertical-bar-zones">
+                  <div class="vertical-bar-zone-positive"></div>
+                  <div class="vertical-bar-baseline"></div>
+                  <div class="vertical-bar-zone-negative">
+                    <div class="vertical-bar range-negative" style="flex: 0 0 74%;"></div>
+                  </div>
+                </div>
+                <div class="vertical-bar-value">-26</div>
+                <div class="vertical-bar-label">Nov</div>
+              </div>
+              <div class="vertical-bar-wrap negative">
+                <div class="vertical-bar-zones">
+                  <div class="vertical-bar-zone-positive"></div>
+                  <div class="vertical-bar-baseline"></div>
+                  <div class="vertical-bar-zone-negative">
+                    <div class="vertical-bar range-negative" style="flex: 0 0 80%;"></div>
+                  </div>
+                </div>
+                <div class="vertical-bar-value">-28</div>
+                <div class="vertical-bar-label">Dec</div>
+              </div>
+              <div class="vertical-bar-wrap negative">
+                <div class="vertical-bar-zones">
+                  <div class="vertical-bar-zone-positive"></div>
+                  <div class="vertical-bar-baseline"></div>
+                  <div class="vertical-bar-zone-negative">
+                    <div class="vertical-bar range-negative" style="flex: 0 0 86%;"></div>
+                  </div>
+                </div>
+                <div class="vertical-bar-value">-30</div>
+                <div class="vertical-bar-label">Jan</div>
+              </div>
+              <div class="vertical-bar-wrap negative">
+                <div class="vertical-bar-zones">
+                  <div class="vertical-bar-zone-positive"></div>
+                  <div class="vertical-bar-baseline"></div>
+                  <div class="vertical-bar-zone-negative">
+                    <div class="vertical-bar range-negative" style="flex: 0 0 89%;"></div>
+                  </div>
+                </div>
+                <div class="vertical-bar-value">-31</div>
+                <div class="vertical-bar-label">Feb</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Biggest Contributors to Digital Wellness</h2>
+          </div>
+          <ul class="contributors-list">
+            <li>
+              <span class="contributor-sign positive">+</span>
+              <span class="contributor-name">i-Ready</span>
+              <span class="contributor-mins">50 min/day</span>
+            </li>
+            <li>
+              <span class="contributor-sign positive">+</span>
+              <span class="contributor-name">Creative tools</span>
+              <span class="contributor-mins">18 min/day</span>
+            </li>
+            <li>
+              <span class="contributor-sign negative">−</span>
+              <span class="contributor-name">Instagram</span>
+              <span class="contributor-mins">48 min/day</span>
+            </li>
+            <li>
+              <span class="contributor-sign negative">−</span>
+              <span class="contributor-name">Excess time</span>
+              <span class="contributor-mins">30 min/day</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

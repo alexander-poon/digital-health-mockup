@@ -587,6 +587,13 @@
     .resource-name-link:hover {
       color: #2563eb;
     }
+    .student-name-link {
+      color: inherit;
+      text-decoration: none;
+    }
+    .student-name-link:hover {
+      color: #2563eb;
+    }
     .resource-icon {
       width: 28px;
       height: 28px;
@@ -886,7 +893,7 @@
           <div class="card">
             <div class="card-header">
               <div class="card-title-wrap">
-                <h2 class="card-title">Daily Minutes per Student by Category <i class="fas fa-info-circle info-icon" data-tooltip="Average daily minutes students spend in each category"></i></h2>
+                <h2 class="card-title">Daily Minutes per Student by Category <i class="fas fa-info-circle info-icon" data-tooltip="Average daily minutes students spend in each category of resource in the selected month. Net Productive Time is calculated as the time spent in Educational and Productivity resources minus the time spent in Passive and Recreational resources, minus Excess Time, minus Late Night Time."></i></h2>
               </div>
               <div class="date-picker-widget" id="date-picker-widget" data-tooltip="Change month to view different period" aria-haspopup="dialog" aria-expanded="false">
                 <i class="fas fa-calendar-alt"></i>
@@ -1034,22 +1041,18 @@
             <thead>
               <tr>
                 <th>Student</th>
+                <th>Grade</th>
                 <th>Net Productive Minutes/Day</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>Jordan M.</td><td>-42</td></tr>
-              <tr><td>Sam K.</td><td>-38</td></tr>
-              <tr><td>Alex R.</td><td>-35</td></tr>
-              <tr><td>Casey L.</td><td>-31</td></tr>
-              <tr><td>Riley T.</td><td>-28</td></tr>
-              <tr class="more-row"><td>Morgan P.</td><td>-25</td></tr>
-              <tr class="more-row"><td>Jamie W.</td><td>-22</td></tr>
-              <tr class="more-row"><td>Quinn D.</td><td>-19</td></tr>
-              <tr class="more-row"><td>Skyler N.</td><td>-16</td></tr>
+              <tr><td><a href="student-jordan-m.html" class="student-name-link">Jordan M.</a></td><td>6</td><td>-42</td></tr>
+              <tr><td><a href="student-sam-k.html" class="student-name-link">Sam K.</a></td><td>7</td><td>-38</td></tr>
+              <tr><td><a href="student-alex-r.html" class="student-name-link">Alex R.</a></td><td>8</td><td>-35</td></tr>
+              <tr><td><a href="student-casey-l.html" class="student-name-link">Casey L.</a></td><td>9</td><td>-31</td></tr>
+              <tr><td><a href="student-riley-t.html" class="student-name-link">Riley T.</a></td><td>9</td><td>-28</td></tr>
             </tbody>
           </table>
-          <span class="list-card-more" data-more="4" data-label-more="+ 4 more" data-label-less="- 4 less"><span class="list-card-more-text">+ 4 more</span> <i class="fas fa-chevron-down"></i></span>
         </div>
         </a>
       </div>
